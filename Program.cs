@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 
 namespace Capstone_Project
 {
-    // **************************************************
+    // ********************************************************
     // Title: Capstone Project (RPG Character Creator)
-    // Description: A program that will allow the user to
-    //              login and create a character for a
-    //              RPG game such as D&D.
+    // Description: A program that will allow one user to login
+    //              and create/view a character for an RPG game
+    //              such as D&D. Only basic stats will be
+    //              available as of now, meaning bonuses given
+    //              for class and race will not be applied to
+    //              overall stats.
     // Application Type: Console
     // Author: Gurthet, Max
     // Dated Created: 4/6/2021
-    // Last Modified: 4/6/2021
-    // **************************************************
+    // Last Modified: 4/8/2021
+    // ********************************************************
     class Program
     {
         /// <summary>
@@ -26,7 +29,9 @@ namespace Capstone_Project
             SetTheme();
             DisplayWelcomeScreen();
             DisplayLoginRegisterMenu();
-            ThemeMenuOperation();
+            DisplayReadAndSetTheme();
+            DisplaySetNewTheme();
+            DisplayMenuScreen();
         }
 
         /// <summary>
@@ -37,6 +42,73 @@ namespace Capstone_Project
             Console.ForegroundColor = ConsoleColor.Green;
             Console.BackgroundColor = ConsoleColor.Black;
         }
+
+        /// <summary>
+        /// main menu screen
+        /// </summary>
+        static void DisplayMenuScreen()
+        {
+            Console.CursorVisible = true;
+
+            bool quitApplication = false;
+            string menuChoice;
+            string charName;
+
+            do
+            {
+                DisplayScreenHeader("Main Menu");
+
+                Console.WriteLine("\ta) Character Name");
+                Console.WriteLine("\tb) Character Race");
+                Console.WriteLine("\tc) Character Class");
+                Console.WriteLine("\td) Hit Points");
+                Console.WriteLine("\te) Ability Scores");
+                Console.WriteLine("\tf) Display Character");
+                Console.WriteLine("\tq) Quit Application");
+                Console.Write("\t\tEnter Choice: ");
+                menuChoice = Console.ReadLine().ToLower();
+
+                switch (menuChoice)
+                {
+                    case "a":
+                        GetCharacterName();
+                        break;
+
+                    case "b":
+                        CharacterRace();
+                        break;
+
+                    case "c":
+                        CharacterClass();
+                        break;
+
+                    case "d":
+                        //HitPoints();
+                        break;
+
+                    case "e":
+                        //AbilityScores();
+                        break;
+
+                    case "f":
+                        DisplayCharacter();
+                        break;
+
+                    case "q":
+                        QuitApp();
+                        quitApplication = true;
+                        break;
+
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine("\tPlease enter a letter for the menu choice.");
+                        DisplayContinuePrompt();
+                        break;
+                }
+
+            } while (!quitApplication);
+        }
+
 
         #region USER INTERFACE
 
@@ -101,6 +173,22 @@ namespace Capstone_Project
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// quits the app
+        /// </summary>
+        static void QuitApp()
+        {
+            Console.CursorVisible = false;
+
+            Console.Clear();
+            DisplayScreenHeader("Quit Application");
+
+            Console.WriteLine("\tYou are about to exit the program.");
+            DisplayContinuePrompt();
+
+            DisplayClosingScreen();
+        }
+        
         #endregion
 
         #region LOGIN/REGISTER INTERFACE
@@ -169,13 +257,19 @@ namespace Capstone_Project
         /// <returns></returns>
         static bool ValidLogin(string userName, string password)
         {
-            (string userName, string password) userInfo;
-            bool validAns;
+            List<(string userName, string password)> registeredUserInfo = new List<(string userName, string password)>();
+            bool validAns = false;
 
-            userInfo = ReadLoginInfo();
+            registeredUserInfo = ReadLoginInfo();
 
-            validAns = (userInfo.userName == userName) && (userInfo.password == password);
-
+            foreach ((string userName, string password) userLoginInfo in registeredUserInfo)
+            {
+                if ((userLoginInfo.userName == userName) && (userLoginInfo.password == password))
+                {
+                    validAns = true;
+                    break;
+                }
+            }
             return validAns;
         }
 
@@ -183,20 +277,28 @@ namespace Capstone_Project
         /// reads the user's login info from a data file
         /// </summary>
         /// <returns></returns>
-        static (string userName, string password) ReadLoginInfo()
+        static List<(string userName, string password)> ReadLoginInfo()
         {
             string dataPath = @"Data/Logins.txt";
 
-            string loginInfoText;
             string[] loginInfoArray;
             (string userName, string password) loginInfoTuple;
 
-            loginInfoText = File.ReadAllText(dataPath);
-            loginInfoArray = loginInfoText.Split(',');
-            loginInfoTuple.userName = loginInfoArray[0];
-            loginInfoTuple.password = loginInfoArray[1];
+            List<(string userName, string password)> registeredUserInfo = new List<(string userName, string password)>();
 
-            return loginInfoTuple;
+            loginInfoArray = File.ReadAllLines(dataPath);
+
+            foreach (string loginInfoText in loginInfoArray)
+            {
+                loginInfoArray = loginInfoText.Split(',');
+
+                loginInfoTuple.userName = loginInfoArray[0];
+                loginInfoTuple.password = loginInfoArray[1];
+
+                registeredUserInfo.Add(loginInfoTuple);
+            }
+
+            return registeredUserInfo;
         }
 
         /// <summary>
@@ -241,18 +343,9 @@ namespace Capstone_Project
 
         #endregion
 
-        #region THEME SELECT INTERFACE
-
+        #region THEME SELECT
         /// <summary>
-        /// code that goes into the main
-        /// </summary>
-        static void ThemeMenuOperation()
-        {
-            DisplayReadAndSetTheme();
-            DisplaySetNewTheme();
-        }
-        /// <summary>
-        /// read and set the theme screen
+        /// read the theme data already entered in data file
         /// </summary>
         static void DisplayReadAndSetTheme()
         {
@@ -279,7 +372,7 @@ namespace Capstone_Project
         }
 
         /// <summary>
-        /// prompts the user to either select new theme or continue with default
+        /// set the theme screen
         /// </summary>
         static void DisplaySetNewTheme()
         {
@@ -287,27 +380,24 @@ namespace Capstone_Project
             bool themeChosen = false;
             string fileIOStatusMessage;
 
-            DisplayScreenHeader("Theme Select Menu");
+            DisplayScreenHeader("Set New Theme");
 
             Console.WriteLine($"\tCurrent foreground color: {Console.ForegroundColor}");
             Console.WriteLine($"\tCurrent background color: {Console.BackgroundColor}");
             Console.WriteLine();
 
-            Console.Write("\tWould you like to change the current theme, yes or no?: ");
-            if (Console.ReadLine().ToLower() == "no")
+            Console.Write("\tWould you like to change the current theme yes or no?: ");
+            if (Console.ReadLine().ToLower() == "yes")
             {
                 do
                 {
-                    themeColors.foregroundColor = UserConsoleColor("foreground");
-                    themeColors.backgroundColor = UserConsoleColor("background");
+                    themeColors.foregroundColor = GetConsoleColorFromUser("foreground");
+                    themeColors.backgroundColor = GetConsoleColorFromUser("background");
 
-                    //
-                    // set new theme
-                    //
                     Console.ForegroundColor = themeColors.foregroundColor;
                     Console.BackgroundColor = themeColors.backgroundColor;
                     Console.Clear();
-                    DisplayScreenHeader("Set Application Theme");
+                    DisplayScreenHeader("Set New Theme");
                     Console.WriteLine($"\tNew foreground color: {Console.ForegroundColor}");
                     Console.WriteLine($"\tNew background color: {Console.BackgroundColor}");
 
@@ -316,15 +406,15 @@ namespace Capstone_Project
                     if (Console.ReadLine().ToLower() == "yes")
                     {
                         themeChosen = true;
-                        fileIOStatusMessage = WriteThemeExceptions(themeColors.foregroundColor, themeColors.backgroundColor);
+                        fileIOStatusMessage = WriteThemeDataExceptions(themeColors.foregroundColor, themeColors.backgroundColor);
                         if (fileIOStatusMessage == "Complete")
                         {
-                            Console.WriteLine("\tNew theme written to data file.");
+                            Console.WriteLine("\n\tNew theme written to data file.\n");
                         }
                         else
                         {
-                            Console.WriteLine("\tNew theme not written to data file.");
-                            Console.WriteLine($"\t{fileIOStatusMessage}");
+                            Console.WriteLine("\n\tNew theme not written to data file.");
+                            Console.WriteLine($"\t*** {fileIOStatusMessage} ***\n");
                         }
                     }
 
@@ -338,31 +428,33 @@ namespace Capstone_Project
         /// </summary>
         /// <param name="property">foreground or background</param>
         /// <returns>user's console color</returns>
-        static ConsoleColor UserConsoleColor(string property)
+        static ConsoleColor GetConsoleColorFromUser(string property)
         {
             ConsoleColor consoleColor;
-            bool validAns;
+            bool validConsoleColor;
 
             do
             {
                 Console.Write($"\tEnter a value for the {property}: ");
-                validAns = Enum.TryParse<ConsoleColor>(Console.ReadLine(), true, out consoleColor);
+                validConsoleColor = Enum.TryParse<ConsoleColor>(Console.ReadLine(), true, out consoleColor);
 
-                if (!validAns)
+                if (!validConsoleColor)
                 {
-                    Console.WriteLine("\tYou have entered an invalid option. Please try again.");
+                    Console.WriteLine("\n\t***** It appears you did not provide a valid color. Please try again. *****\n");
                 }
                 else
                 {
-                    validAns = true;
+                    validConsoleColor = true;
                 }
-            } while (!validAns);
+
+            } while (!validConsoleColor);
 
             return consoleColor;
         }
 
         /// <summary>
-        /// read the theme exceptions
+        /// read theme info to data file with try/catch block
+        /// returning a file IO status message using an out parameter
         /// </summary>
         /// <returns>tuple of foreground and background</returns>
         static (ConsoleColor foregroundColor, ConsoleColor backgroundColor) ReadThemeDataExceptions(out string fileIOStatusMessage)
@@ -399,10 +491,11 @@ namespace Capstone_Project
         }
 
         /// <summary>
-        /// write theme info to a data file
+        /// write theme info to data file with try/catch block
+        /// returning a file IO status message using an out parameter
         /// </summary>
         /// <returns>tuple of foreground and background</returns>
-        static string WriteThemeExceptions(ConsoleColor foreground, ConsoleColor background)
+        static string WriteThemeDataExceptions(ConsoleColor foreground, ConsoleColor background)
         {
             string dataPath = @"Data/Theme.txt";
             string fileIOStatusMessage = "";
@@ -424,6 +517,106 @@ namespace Capstone_Project
 
             return fileIOStatusMessage;
         }
+
+        #endregion
+
+        #region CHARACTER NAME
+        /// <summary>
+        /// asks the user to enter their character's name
+        /// </summary>
+        static object GetCharacterName()
+        {
+            DisplayScreenHeader("Character Name");
+
+            Console.Write("\tPlease enter the desired name for your character: ");
+            string charName = Console.ReadLine();
+            DisplayCharacterName(charName);
+
+            return charName;
+        }
+
+        /// <summary>
+        /// echos the chosen name back to the user
+        /// </summary>
+        /// <param name="charName"></param>
+        static void DisplayCharacterName(string charName)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"\tYour character's name is {charName}");
+            DisplayContinuePrompt();
+        }
+
+        #endregion
+
+        #region CHARACTER RACE
+        /// <summary>
+        /// prompt the user to enter their character's race
+        /// </summary>
+        static object CharacterRace()
+        {
+            DisplayScreenHeader("Character Race");
+
+            Console.WriteLine("\t**** PLEASE NOTE THAT BONUSES FOR RACE WILL NOT BE APPLIED TO THE OVERALL STATS ****");
+            Console.WriteLine();
+            Console.Write("\tPlease enter the desired race for your character: ");
+            string charRace = Console.ReadLine();
+            DisplayCharacterRace(charRace);
+
+            return charRace;
+        }
+
+        /// <summary>
+        /// echoe's the race of the character back to the user
+        /// </summary>
+        static void DisplayCharacterRace(string charRace)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"\tYour character's race is {charRace}");
+            DisplayContinuePrompt();
+        }
+
+        #endregion
+
+        #region CHARACTER CLASS
+        /// <summary>
+        /// prompts the user to enter their character's class
+        /// </summary>
+        /// <returns></returns>
+        static object CharacterClass()
+        {
+            DisplayScreenHeader("Character Name");
+
+            Console.Write("\tPlease enter the desired class for your character: ");
+            string charClass = Console.ReadLine();
+            DisplayCharacterClass (charClass);
+
+            return charClass;
+        }
+
+        /// <summary>
+        /// echoes the class of the character back to the user
+        /// </summary>
+        /// <param name="charClass"></param>
+        static void DisplayCharacterClass(string charClass)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"\tYour character's class is {charClass}");
+            DisplayContinuePrompt();
+        }
+
+        #endregion
+
+        #region DISPLAY CHARACTER
+        /// <summary>
+        /// dsiplays all the entered values from all previous functions
+        /// </summary>
+        static void DisplayCharacter(string charName, string charRace, string charClass)
+        {
+            DisplayCharacterName(charName);
+            DisplayCharacterRace(charRace);
+            DisplayCharacterClass(charClass);
+        }
+
         #endregion
     }
 }
