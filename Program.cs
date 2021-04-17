@@ -52,7 +52,9 @@ namespace Capstone_Project
 
             bool quitApplication = false;
             string menuChoice;
-            string charName;
+            string charName = null;
+            string charRace = null;
+            string charClass = null;
 
             do
             {
@@ -71,15 +73,15 @@ namespace Capstone_Project
                 switch (menuChoice)
                 {
                     case "a":
-                        GetCharacterName();
+                        charName = GetCharacterName();
                         break;
 
                     case "b":
-                        CharacterRace();
+                        charRace = CharacterRace();
                         break;
 
                     case "c":
-                        CharacterClass();
+                        charClass = CharacterClass();
                         break;
 
                     case "d":
@@ -91,7 +93,7 @@ namespace Capstone_Project
                         break;
 
                     case "f":
-                        DisplayCharacter();
+                        DisplayCharacterAll(charName, charRace, charClass);
                         break;
 
                     case "q":
@@ -108,6 +110,7 @@ namespace Capstone_Project
 
             } while (!quitApplication);
         }
+
 
 
         #region USER INTERFACE
@@ -188,7 +191,7 @@ namespace Capstone_Project
 
             DisplayClosingScreen();
         }
-        
+
         #endregion
 
         #region LOGIN/REGISTER INTERFACE
@@ -524,26 +527,14 @@ namespace Capstone_Project
         /// <summary>
         /// asks the user to enter their character's name
         /// </summary>
-        static object GetCharacterName()
+        static string GetCharacterName()
         {
             DisplayScreenHeader("Character Name");
 
             Console.Write("\tPlease enter the desired name for your character: ");
             string charName = Console.ReadLine();
-            DisplayCharacterName(charName);
 
             return charName;
-        }
-
-        /// <summary>
-        /// echos the chosen name back to the user
-        /// </summary>
-        /// <param name="charName"></param>
-        static void DisplayCharacterName(string charName)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"\tYour character's name is {charName}");
-            DisplayContinuePrompt();
         }
 
         #endregion
@@ -552,7 +543,7 @@ namespace Capstone_Project
         /// <summary>
         /// prompt the user to enter their character's race
         /// </summary>
-        static object CharacterRace()
+        static string CharacterRace()
         {
             DisplayScreenHeader("Character Race");
 
@@ -560,19 +551,8 @@ namespace Capstone_Project
             Console.WriteLine();
             Console.Write("\tPlease enter the desired race for your character: ");
             string charRace = Console.ReadLine();
-            DisplayCharacterRace(charRace);
 
             return charRace;
-        }
-
-        /// <summary>
-        /// echoe's the race of the character back to the user
-        /// </summary>
-        static void DisplayCharacterRace(string charRace)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"\tYour character's race is {charRace}");
-            DisplayContinuePrompt();
         }
 
         #endregion
@@ -582,26 +562,14 @@ namespace Capstone_Project
         /// prompts the user to enter their character's class
         /// </summary>
         /// <returns></returns>
-        static object CharacterClass()
+        static string CharacterClass()
         {
             DisplayScreenHeader("Character Name");
 
             Console.Write("\tPlease enter the desired class for your character: ");
             string charClass = Console.ReadLine();
-            DisplayCharacterClass (charClass);
 
             return charClass;
-        }
-
-        /// <summary>
-        /// echoes the class of the character back to the user
-        /// </summary>
-        /// <param name="charClass"></param>
-        static void DisplayCharacterClass(string charClass)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"\tYour character's class is {charClass}");
-            DisplayContinuePrompt();
         }
 
         #endregion
@@ -610,13 +578,21 @@ namespace Capstone_Project
         /// <summary>
         /// dsiplays all the entered values from all previous functions
         /// </summary>
-        static void DisplayCharacter(string charName, string charRace, string charClass)
+        static void DisplayCharacterAll(string charName, string charRace, string charClass)
         {
-            DisplayCharacterName(charName);
-            DisplayCharacterRace(charRace);
-            DisplayCharacterClass(charClass);
-        }
+            DisplayScreenHeader("Character Sheet");
 
+            Console.WriteLine("\t***********************");
+            Console.WriteLine($"\tName: {charName}");
+            Console.WriteLine();
+            Console.WriteLine($"\tRace: {charRace}");
+            Console.WriteLine();
+            Console.WriteLine($"\tClass: {charClass}");
+            Console.WriteLine("\t***********************");
+            Console.WriteLine();
+
+            DisplayMenuPrompt("Main Menu");
+        }
         #endregion
     }
 }
