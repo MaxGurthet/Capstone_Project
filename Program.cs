@@ -55,6 +55,7 @@ namespace Capstone_Project
             string charName = null;
             string charRace = null;
             string charClass = null;
+            int hitPoints = 0;
 
             do
             {
@@ -63,8 +64,8 @@ namespace Capstone_Project
                 Console.WriteLine("\ta) Character Name");
                 Console.WriteLine("\tb) Character Race");
                 Console.WriteLine("\tc) Character Class");
-                Console.WriteLine("\td) Hit Points");
-                Console.WriteLine("\te) Ability Scores");
+                Console.WriteLine("\td) Ability Scores");
+                Console.WriteLine("\te) Hit Points");
                 Console.WriteLine("\tf) Display Character");
                 Console.WriteLine("\tq) Quit Application");
                 Console.Write("\t\tEnter Choice: ");
@@ -85,11 +86,11 @@ namespace Capstone_Project
                         break;
 
                     case "d":
-                        //HitPoints();
+                        //AbilityScores();
                         break;
 
                     case "e":
-                        //AbilityScores();
+                        hitPoints = HitPoints();
                         break;
 
                     case "f":
@@ -110,7 +111,6 @@ namespace Capstone_Project
 
             } while (!quitApplication);
         }
-
 
 
         #region USER INTERFACE
@@ -574,13 +574,64 @@ namespace Capstone_Project
 
         #endregion
 
+        #region HIT POINTS
+
+        /// <summary>
+        /// prompts the user to roll for their hit points
+        /// </summary>
+        /// <returns></returns>
+        static int HitPoints()
+        {
+            int hitPoints;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Hit Points");
+                Console.WriteLine("\t****PLEASE NOTE THAT CONSTITUION MODIFIERS WILL NOT BE ADDED TO HIT POINTS****")
+
+                Console.WriteLine("\tEach class has different reuqirements for hit dice. Below is a list for the different hit dice each class uses.");
+                Console.WriteLine();
+                Console.WriteLine("\td6: sorcerer, wizard");
+                Console.WriteLine("\td8: artificer, bard, cleric, druid, monk, rogue, warlock.");
+                Console.WriteLine("\td10: fighter, paladin, ranger");
+                Console.WriteLine("\td12: barbarian");
+                Console.WriteLine();
+                Console.WriteLine("\tUsing the appropriate dice, roll for hit points and add your consitution modifier.");
+                Console.WriteLine("\tIf you don't have dice available, copy and paste this link into google: https://www.google.com/search?q=dice+roller");
+                Console.WriteLine();
+                Console.WriteLine("\tPlease enter the number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out hitPoints))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return hitPoints;
+        }
+
+        #endregion
+
         #region DISPLAY CHARACTER
         /// <summary>
         /// dsiplays all the entered values from all previous functions
         /// </summary>
         static void DisplayCharacterAll(string charName, string charRace, string charClass)
         {
-            DisplayScreenHeader("Character Sheet");
+            DisplayScreenHeader("Display Character");
 
             Console.WriteLine("\t***********************");
             Console.WriteLine($"\tName: {charName}");
