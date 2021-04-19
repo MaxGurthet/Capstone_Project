@@ -56,6 +56,12 @@ namespace Capstone_Project
             string charRace = null;
             string charClass = null;
             int hitPoints = 0;
+            int str = 0;
+            int dex = 0;
+            int con = 0;
+            int intell = 0;
+            int wis = 0;
+            int charis = 0;
 
             do
             {
@@ -86,7 +92,13 @@ namespace Capstone_Project
                         break;
 
                     case "d":
-                        //AbilityScores();
+                        str = StrengthRoll();
+                        dex = DexterityRoll();
+                        con = ConstitutionRoll();
+                        intell = IntelligenceRoll();
+                        wis = WisdomRoll();
+                        charis = CharismaRoll();
+
                         break;
 
                     case "e":
@@ -94,7 +106,7 @@ namespace Capstone_Project
                         break;
 
                     case "f":
-                        DisplayCharacterAll(charName, charRace, charClass);
+                        DisplayCharacterAll(charName, charRace, charClass, hitPoints, str, dex, con, intell, wis, charis);
                         break;
 
                     case "q":
@@ -111,7 +123,6 @@ namespace Capstone_Project
 
             } while (!quitApplication);
         }
-
 
         #region USER INTERFACE
 
@@ -574,6 +585,243 @@ namespace Capstone_Project
 
         #endregion
 
+        #region ABILITY SCORES
+        /// <summary>
+        /// prompts the user to enter their strength roll
+        /// </summary>
+        /// <returns></returns>
+        static int StrengthRoll()
+        {
+            int str;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Strength Roll");
+
+                Console.WriteLine("\tUsing a d20, roll five times and choose the highest number.");
+                Console.WriteLine("\tIf you do not have dice available, search dice roller in google.");
+                Console.WriteLine();
+                Console.Write("\tPlease enter the highest number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out str))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return str;
+        }
+
+        /// <summary>
+        /// prompts the user to enter their dexterity roll
+        /// </summary>
+        /// <returns></returns>
+        static int DexterityRoll()
+        {
+            int dex;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Dexterity Roll");
+
+                Console.WriteLine("\tUsing a d20, roll five times and choose the highest number.");
+                Console.WriteLine("\tIf you do not have dice available, search dice roller in google.");
+                Console.WriteLine();
+                Console.Write("\tPlease enter the highest number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out dex))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return dex;
+        }
+
+        /// <summary>
+        /// prompts the user to enter their constitution roll
+        /// </summary>
+        /// <returns></returns>
+        static int ConstitutionRoll()
+        {
+            int con;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Constitution Roll");
+
+                Console.WriteLine("\tUsing a d20, roll five times and choose the highest number.");
+                Console.WriteLine("\tIf you do not have dice available, search dice roller in google.");
+                Console.WriteLine();
+                Console.Write("\tPlease enter the highest number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out con))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return con;
+        }
+
+        /// <summary>
+        /// prompts the user to enter their intelligence roll
+        /// </summary>
+        /// <returns></returns>
+        static int IntelligenceRoll()
+        {
+            int intell;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Intelligence Roll");
+
+                Console.WriteLine("\tUsing a d20, roll five times and choose the highest number.");
+                Console.WriteLine("\tIf you do not have dice available, search dice roller in google.");
+                Console.WriteLine();
+                Console.Write("\tPlease enter the highest number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out intell))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return intell;
+        }
+
+        /// <summary>
+        /// prompts the user to enter their charisma roll
+        /// </summary>
+        /// <returns></returns>
+        static int CharismaRoll()
+        {
+            int charis;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Charisma Roll");
+
+                Console.WriteLine("\tUsing a d20, roll five times and choose the highest number.");
+                Console.WriteLine("\tIf you do not have dice available, search dice roller in google.");
+                Console.WriteLine();
+                Console.Write("\tPlease enter the highest number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out charis))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return charis;
+        }
+
+        /// <summary>
+        /// prompts the user to enter their wisdom roll
+        /// </summary>
+        /// <returns></returns>
+        static int WisdomRoll()
+        {
+            int wis;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayScreenHeader("Wisdom Roll");
+
+                Console.WriteLine("\tUsing a d20, roll five times and choose the highest number.");
+                Console.WriteLine("\tIf you do not have dice available, search dice roller in google.");
+                Console.WriteLine();
+                Console.Write("\tPlease enter the highest number you rolled: ");
+                userResponse = Console.ReadLine();
+
+                if (!int.TryParse(userResponse, out wis))
+                {
+                    validResponse = false;
+                    Console.WriteLine("It appears you have entered an invalid input. Please enter a valid number.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                    Console.WriteLine();
+                    Console.Clear();
+                }
+                else
+                {
+                    validResponse = true;
+                }
+
+            } while (!validResponse);
+
+            return wis;
+        }
+
+        #endregion
+
         #region HIT POINTS
 
         /// <summary>
@@ -589,8 +837,8 @@ namespace Capstone_Project
             do
             {
                 DisplayScreenHeader("Hit Points");
-                Console.WriteLine("\t****PLEASE NOTE THAT CONSTITUION MODIFIERS WILL NOT BE ADDED TO HIT POINTS****")
-
+                Console.WriteLine("\t****PLEASE NOTE THAT CONSTITUION MODIFIERS WILL NOT BE ADDED TO HIT POINTS****");
+                Console.WriteLine();
                 Console.WriteLine("\tEach class has different reuqirements for hit dice. Below is a list for the different hit dice each class uses.");
                 Console.WriteLine();
                 Console.WriteLine("\td6: sorcerer, wizard");
@@ -599,9 +847,9 @@ namespace Capstone_Project
                 Console.WriteLine("\td12: barbarian");
                 Console.WriteLine();
                 Console.WriteLine("\tUsing the appropriate dice, roll for hit points and add your consitution modifier.");
-                Console.WriteLine("\tIf you don't have dice available, copy and paste this link into google: https://www.google.com/search?q=dice+roller");
+                Console.WriteLine("\tIf you don't have dice available, search dice roller in google.");
                 Console.WriteLine();
-                Console.WriteLine("\tPlease enter the number you rolled: ");
+                Console.Write("\tPlease enter the number you rolled: ");
                 userResponse = Console.ReadLine();
 
                 if (!int.TryParse(userResponse, out hitPoints))
@@ -629,7 +877,7 @@ namespace Capstone_Project
         /// <summary>
         /// dsiplays all the entered values from all previous functions
         /// </summary>
-        static void DisplayCharacterAll(string charName, string charRace, string charClass)
+        static void DisplayCharacterAll(string charName, string charRace, string charClass, int hitPoints, int str, int dex, int con, int intell, int wis, int charis)
         {
             DisplayScreenHeader("Display Character");
 
@@ -639,6 +887,20 @@ namespace Capstone_Project
             Console.WriteLine($"\tRace: {charRace}");
             Console.WriteLine();
             Console.WriteLine($"\tClass: {charClass}");
+            Console.WriteLine();
+            Console.WriteLine($"\tHit Points: {hitPoints}");
+            Console.WriteLine();
+            Console.WriteLine($"\tStrength: {str}");
+            Console.WriteLine();
+            Console.WriteLine($"\tDexterity: {dex}");
+            Console.WriteLine();
+            Console.WriteLine($"\tConstitution: {con}");
+            Console.WriteLine();
+            Console.WriteLine($"\tIntelligence: {intell}");
+            Console.WriteLine();
+            Console.WriteLine($"\tWisdom: {wis}");
+            Console.WriteLine();
+            Console.WriteLine($"\tCharisma: {charis}");
             Console.WriteLine("\t***********************");
             Console.WriteLine();
 
